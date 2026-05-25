@@ -1,0 +1,11 @@
+name: Deploy Deploymate to netlify
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest

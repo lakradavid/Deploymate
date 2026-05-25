@@ -1,0 +1,29 @@
+{
+  "name": "deploymate",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alokkksharmaa/DeployMate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/alokkksharmaa/DeployMate/issues"
+  },
+  "homepage": "https://github.com/alokkksharmaa/DeployMate#readme",
+  "dependencies": {
+    "bullmq": "^5.76.10",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "ioredis": "^5.10.1",
+    "mongoose": "^9.6.2"
+  }
+}
