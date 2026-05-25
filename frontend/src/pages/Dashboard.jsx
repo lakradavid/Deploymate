@@ -19,7 +19,9 @@ export const Dashboard = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
         <div className="card">
           <h3 style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Total Deployments</h3>
-          <div style={{ fontSize: '2rem', fontWeight: 600 }}>{loading ? '...' : (data?.meta?.total || 0)}</div>
+          <div style={{ fontSize: '2rem', fontWeight: 600 }}>
+            {(loading && data === null) ? '...' : (data?.meta?.total ?? 0)}
+          </div>
         </div>
         <div className="card">
           <h3 style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Success Rate</h3>

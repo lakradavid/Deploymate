@@ -1,14 +1,21 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
-export const usePolling = (fetchFn, interval = 5000, dependencies = []) => {
+export const usePolling = (fetchFn, interval = 5000) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Keep a stable ref to the latest fetchFn so changing it never
+  // restarts the polling loop or causes a loading flash.
+  const fetchFnRef = useRef(fetchFn);
+  useEffect(() => {
+    fetchFnRef.current = fetchFn;
+  }, [fetchFn]);
+
   const fetchData = useCallback(async (isBackground = false) => {
     if (!isBackground) setLoading(true);
     try {
-      const result = await fetchFn();
+      const result = await fetchFnRef.current();
       setData(result);
       setError(null);
     } catch (err) {
@@ -16,7 +23,7 @@ export const usePolling = (fetchFn, interval = 5000, dependencies = []) => {
     } finally {
       if (!isBackground) setLoading(false);
     }
-  }, [fetchFn, ...dependencies]);
+  }, []); // stable — never recreated
 
   useEffect(() => {
     let isMounted = true;
@@ -24,18 +31,18 @@ export const usePolling = (fetchFn, interval = 5000, dependencies = []) => {
 
     const poll = async () => {
       if (!isMounted) return;
-      await fetchData(true);
+      await fetchData(true); // background = no loading flash
       timeoutId = setTimeout(poll, interval);
     };
 
-    fetchData(); // Initial fetch
+    fetchData(); // initial fetch (shows loading spinner once)
     timeoutId = setTimeout(poll, interval);
 
     return () => {
       isMounted = false;
       clearTimeout(timeoutId);
     };
-  }, [fetchData, interval]);
+  }, [fetchData, interval]); // both are now stable
 
-  return { data, loading, error, refetch: fetchData };
+  return { data, loading, error, refetch: () => fetchData(false) };
 };
